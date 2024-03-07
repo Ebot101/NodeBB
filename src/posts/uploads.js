@@ -30,18 +30,18 @@ module.exports = function (Posts) {
         return fullPath.startsWith(pathPrefix) && await file.exists(fullPath) ? filePath : false;
     }))).filter(Boolean);
 
-    const runJobs = nconf.get('runJobs');
-    if (runJobs) {
-        new cronJob('0 2 * * 0', async () => {
-            const orphans = await Posts.uploads.cleanOrphans();
-            if (orphans.length) {
-                winston.info(`[posts/uploads] Deleting ${orphans.length} orphaned uploads...`);
-                orphans.forEach((relPath) => {
-                    process.stdout.write(`${chalk.red('  - ')} ${relPath}`);
-                });
-            }
-        }, null, true);
-    }
+    // const runJobs = nconf.get('runJobs');
+    // if (runJobs) {
+    //     new cronJob('0 2 * * 0', async () => {
+    //         const orphans = await Posts.uploads.cleanOrphans();
+    //         if (orphans.length) {
+    //             winston.info(`[posts/uploads] Deleting ${orphans.length} orphaned uploads...`);
+    //             orphans.forEach((relPath) => {
+    //                 process.stdout.write(`${chalk.red('  - ')} ${relPath}`);
+    //             });
+    //         }
+    //     }, null, true);
+    // }
 
     Posts.uploads.sync = async function (pid) {
         // Scans a post's content and updates sorted set of uploads
